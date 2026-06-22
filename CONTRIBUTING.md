@@ -271,6 +271,34 @@ Tests can be executed via Maven (`./mvnw verify`) or in your preferred IDE. The 
 > To execute the tests quickly, run `./mvnw verify -Dquickly -DskipTests=false`.
 > The tests will be skipped when using `-Dquickly` without `-DskipTests=false`.
 
+#### Code formatting
+
+This project uses [Google Java Format](https://github.com/google/google-java-format) enforced via
+the Spotless Maven plugin. CI will fail if any file is not formatted correctly.
+
+To format all files before pushing:
+
+```sh
+./mvnw spotless:apply
+```
+
+To check without modifying files:
+
+```sh
+./mvnw spotless:check
+```
+
+If only specific modules are affected, scope the command to avoid a full-repo run:
+
+```sh
+./mvnw spotless:apply -pl <module-path>
+```
+
+> [!TIP]
+> When adding a field to a record or DTO, grep for all test files that construct that type across
+> **all modules** — not just the ones you directly edited. Any call site whose line now exceeds the
+> 100-character limit will fail Spotless even if you did not touch that file.
+
 #### Test troubleshooting
 
 - If you encounter issues (like `java.lang.UnsatisfiedLinkError: failed to load the required native library`) while running the test StandaloneGatewaySecurityTest.shouldStartWithTlsEnabled take a look at https://github.com/camunda/camunda/issues/10488 to resolve it.
